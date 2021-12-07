@@ -1,7 +1,6 @@
 from dbfread import DBF
 import pickle
 
-
 #   도로정보 DBF 파일에서 xml_list에 있는 범위 내의 도로만 추출합니다
 def dbf2dump(file_path, dump_path, xmlmin, xmlmax):
     linkdiclist = list()
