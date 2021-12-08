@@ -5,6 +5,3 @@ import pandas as pd
 def DicToDF(param1, dex = None, col = None):
     df = pd.DataFrame(param1, index=dex, columns = col)
     return df
-
-def selectDF(param1):
-    return 0
