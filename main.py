@@ -43,10 +43,10 @@ def initalizeData():
     merged = pd.merge(left=b, right=a, how="left", on="LINKID")
     return merged
 
-
+#리스트를 선택점부터 count개 만큼 잘라내는 코드
 def cutList(target, indexS, count):
     res = list()
-    if indexS+count < len(target):
+    if indexS+count < len(target):      #목표 개수에 의한 인덱스 초과를 방지
         end = indexS+count
     else:
         end = len(target)
