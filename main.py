@@ -2,6 +2,7 @@ import dbf_func
 import df_func
 import xml_func
 import web_func
+import pandas as pd
 
 
 # xml 데이터 가공 부분
@@ -15,11 +16,12 @@ def makexmllist():
 
 #DBF 데이터 가공부분
 def makeDBFlist(xml_list):
-    # XML의 최소/최대값을 가진 2칸짜리 리스트
-    xmlmetadata = xml_func.minmaxlinkid(xml_list)
-    # DBF 파일을 딕셔너리 리스트로 만든후 덤프파일 생성
-    # XML에 있는 LINKID 범위만을 추출해서 덤프파일의 크기감소
-    dbf_func.dbf2dump('dump_file/MOCT_LINK.dbf', 'dump_file/dbf_dump.txt', xmlmetadata[0], xmlmetadata[1])
+    if open('dump_file/dbf_dump.txt') is None:
+        # XML의 최소/최대값을 가진 2칸짜리 리스트
+        xmlmetadata = xml_func.minmaxlinkid(xml_list)
+        # DBF 파일을 딕셔너리 리스트로 만든후 덤프파일 생성
+        # XML에 있는 LINKID 범위만을 추출해서 덤프파일의 크기감소
+        dbf_func.dbf2dump('dump_file/MOCT_LINK.dbf', 'dump_file/dbf_dump.txt', xmlmetadata[0], xmlmetadata[1])
     dbf_list = dbf_func.opendbfdump('dump_file/dbf_dump.txt')   # dump.txt 파일 list 로 반환
     p = dbf_func.filter_dbfdata_list(xml_list, dbf_list)    # dbf_dump 파일 xml 리스트에 맞추어서 최종 필터링
     return p
@@ -37,4 +39,17 @@ def initalizeData():
     xml_list = makexmllist()   # xml 딕셔너리 리스트 변수
     dbf_list = makeDBFlist(xml_list)   # dbf 딕셔너리 리스트 변수
     a, b = makeDF(xml_list, dbf_list)   # dataFrame 형식 변경
-    return a, b
+    a = a.drop('PRCN_DT', axis=1)
+    merged = pd.merge(left=b, right=a, how="left", on="LINKID")
+    return merged
+
+
+def cutList(target, indexS, count):
+    res = list()
+    if indexS+count < len(target):
+        end = indexS+count
+    else:
+        end = len(target)
+    for i in range(indexS, end):
+        res.append(target[i])
+    return res
