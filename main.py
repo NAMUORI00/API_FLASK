@@ -46,6 +46,10 @@ def initalizeData():
 
 def cutList(target, indexS, count):
     res = list()
-    for i in range(indexS, indexS+count):
+    if indexS+count < len(target):
+        end = indexS+count
+    else:
+        end = len(target)
+    for i in range(indexS, end):
         res.append(target[i])
     return res
