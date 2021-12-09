@@ -31,14 +31,8 @@ def paging():
     partiallist = main.cutList(dbf, (page-1)*pp, pp)                        #테이블 분할
     indexrange = range((page-1)*pp+1, (page-1)*pp+1+len(partiallist))       
     listview = df_func.DicToDF(partiallist, indexrange, index)              #분할된 테이블을 DF로 변환
-    web_func.df2htmltable(listview, "templates\page.html")                  #iframe용 html생성
-    hidden()
+    web_func.df2htmltable(listview, "static\page.html")                  #iframe용 html생성
     return render_template('final.html', pagination=fakepaging)
-
-#페이징에 쓰이는 분할된 테이블이 출력
-@app.route('/hidden/')
-def hidden():
-    return render_template('page.html')
 
 if __name__ == '__main__':
     app.run(threaded=True)
